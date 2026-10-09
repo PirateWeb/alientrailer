@@ -1,0 +1,16 @@
+#!/bin/sh
+MAX_SIZE=$((50 * 1024 * 1024))
+git diff --cached --name-only --diff-filter=AM | while read -r FILE
+do
+    [ -f "$FILE" ] || continue
+    SIZE=$(wc -c < "$FILE")
+    if [ "$SIZE" -gt "$MAX_SIZE" ]; then
+        if ! git check-attr filter -- "$FILE" | grep -q "lfs"; then
+            echo "Large file detected: $FILE ($(numfmt --to=iec $SIZE))"
+            git lfs track --filename "$FILE"
+            git add .gitattributes
+            git add "$FILE"
+            echo "Automatically added to Git LFS"
+        fi
+    fi
+done
