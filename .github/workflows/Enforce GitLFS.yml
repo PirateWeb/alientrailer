@@ -15,7 +15,7 @@ run: |
   if [ "$SIZE" -gt "$LIMIT" ]; then
   if ! git check-attr filter -- "$FILE" | grep -q "lfs"; then
 echo "ERROR: $FILE is $(numfmt --to=iec $SIZE) and not in LFS"
-FAIL=1
+ FAIL=1
   fi
   fi
   done < <(git ls-tree -r -l HEAD)
