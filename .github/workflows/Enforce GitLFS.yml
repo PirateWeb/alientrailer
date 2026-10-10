@@ -10,7 +10,7 @@ name: Reject non-LFS files over 50MB
 run: |
     LIMIT=$((50 * 1024 * 1024))
     FAIL=0
-        while read SHA TYPE SIZE FILE
+    while read SHA TYPE SIZE FILE
   do
   if [ "$SIZE" -gt "$LIMIT" ]; then
   if ! git check-attr filter -- "$FILE" | grep -q "lfs"; then
