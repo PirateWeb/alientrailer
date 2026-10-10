@@ -1,0 +1,22 @@
+on:
+pull_request:
+push:
+jobs:
+check-lfs:
+runs-on: ubuntu-latest
+steps:
+uses: actions/checkout@v4
+name: Reject non-LFS files over 50MB
+run: |
+LIMIT=$((50 * 1024 * 1024))
+FAIL=0
+while read SHA TYPE SIZE FILE
+do
+if [ "$SIZE" -gt "$LIMIT" ]; then
+if ! git check-attr filter -- "$FILE" | grep -q "lfs"; then
+echo "ERROR: $FILE is $(numfmt --to=iec $SIZE) and not in LFS"
+FAIL=1
+fi
+fi
+done < <(git ls-tree -r -l HEAD)
+exit $FAIL
