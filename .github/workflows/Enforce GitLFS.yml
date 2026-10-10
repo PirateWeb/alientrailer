@@ -8,7 +8,7 @@ steps:
 uses: actions/checkout@v4
 name: Reject non-LFS files over 50MB
 run: |
-    LIMIT=$((50 * 1024 * 1024))
+ LIMIT=$((50 * 1024 * 1024))
  FAIL=0
  while read SHA TYPE SIZE FILE
   do
